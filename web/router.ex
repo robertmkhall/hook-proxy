@@ -19,8 +19,9 @@ defmodule HookProxy.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", HookProxy do
-  #   pipe_through :api
-  # end
+  scope "/api", HookProxy do
+    pipe_through :api
+
+    post "/webhook", WebHookController, :forward
+  end
 end
