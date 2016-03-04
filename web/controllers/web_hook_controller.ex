@@ -3,7 +3,7 @@ defmodule HookProxy.WebHookController do
 
   def forward(conn, _params) do
     print_body Plug.Conn.read_body(conn)
-    conn
+    Plug.Conn.send_resp(conn, 200, "Success!")
   end
 
   def print_body({status, body, conn}) do
