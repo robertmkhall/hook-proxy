@@ -23,7 +23,7 @@ defmodule HookProxy.Router do
     pipe_through :api
 
     scope "/webhook" do
-      post "/", WebHookController, :forward
+      post "/", WebHookController, :process_webhook
     end
   end
 end
