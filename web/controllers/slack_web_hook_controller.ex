@@ -1,4 +1,4 @@
-defmodule HookProxy.WebHookController do
+defmodule HookProxy.SlackWebHookController do
   use HookProxy.Web, :controller
 
   alias HookProxy.SlackClient, as: Slack
@@ -10,25 +10,25 @@ defmodule HookProxy.WebHookController do
     |> send_response(conn)
   end
 
-  def response_body(response) do
+  defp response_body(response) do
     Map.get(response, :body)
   end
 
-  def response_status_code(response) do
+  defp response_status_code(response) do
     Map.get(response, :status_code)
   end
 
-  def forward_to_slack(conn) do
+  defp forward_to_slack(conn) do
     conn
     |> slack_payload
     |> Slack.post
   end
 
-  def send_response({_status, response}, conn) do
+  defp send_response({_status, response}, conn) do
     Plug.Conn.send_resp(conn, response_status_code(response), response_body(response))
   end
 
-  def slack_payload(conn) do
+  defp slack_payload(conn) do
     GithubAdapter.slack_request(conn)
   end
 end

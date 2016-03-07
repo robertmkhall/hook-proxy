@@ -39,23 +39,40 @@ defmodule HookProxy.GithubToSlackAdapter do
   defp request_json(type, payload) do
     %{"attachments": [
       %{
-        "pretext": "[#{Webhook.repo_name(payload)}] #{request_type_display(type)} submitted by #{Webhook.user_login(payload)}",
+        "pretext": "#{custom_message}#{webhook_type_message(type, payload)}",
         "color": "good",
         "fields": [
           %{
-            "value": "##{Webhook.number(payload)} #{request_title(type, payload)}",
+            "value": "##{Webhook.number(payload)} #{webhook_title(type, payload)}",
           }
         ]
       }
     ]}
   end
 
-  defp request_type_display(text) do
-    String.replace(text, "_", " ")
+  defp custom_message do
+    System.get_env("CUSTOM_SLACK_MESSAGE")
+    |> check_custom_message
+  end
+
+  defp check_custom_message(msg) do
+    if String.length(msg) > 0 do
+      "#{msg}\n\n"
+    else
+      ""
+    end
+  end
+
+  defp webhook_type_message(type, payload) do
+    "[#{Webhook.repo_name(payload)}] #{format_request_type(type)} submitted by #{Webhook.user_login(payload)}"
+  end
+
+  defp format_request_type(type) do
+    String.replace(type, "_", " ")
     |> String.capitalize
   end
 
-  defp request_title(type, payload) do
+  defp webhook_title(type, payload) do
     case type do
       "pull_request" -> PullRequest.slack_title(payload)
       _ -> default_message(payload)
