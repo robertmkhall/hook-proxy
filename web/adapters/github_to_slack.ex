@@ -1,5 +1,6 @@
 defmodule HookProxy.GithubToSlackAdapter do
   alias HookProxy.GitHubPullRequest, as: PullRequest
+  alias HookProxy.GitHubWebhook, as: Webhook
 
   def slack_request(conn) do
     slack_request(request_type(conn), request_body(conn))
@@ -36,8 +37,27 @@ defmodule HookProxy.GithubToSlackAdapter do
   end
 
   defp request_json(type, payload) do
+    %{"attachments": [
+      %{
+        "pretext": "[#{Webhook.repo_name(payload)}] #{request_type_display(type)} submitted by #{Webhook.user_login(payload)}",
+        "color": "good",
+        "fields": [
+          %{
+            "value": "##{Webhook.number(payload)} #{request_title(type, payload)}",
+          }
+        ]
+      }
+    ]}
+  end
+
+  defp request_type_display(text) do
+    String.replace(text, "_", " ")
+    |> String.capitalize
+  end
+
+  defp request_title(type, payload) do
     case type do
-      "pull_request" -> PullRequest.slack_message(payload)
+      "pull_request" -> PullRequest.slack_title(payload)
       _ -> default_message(payload)
     end
   end
