@@ -37,13 +37,19 @@ defmodule HookProxy.GithubToSlackAdapter do
   end
 
   defp request_json(type, payload) do
-    %{"attachments": [
+    %{
+      "username": "github",
+      "icon_emoji": ":trollface:",
+      "text": custom_message,
+      "mrkdwn": true,
+      "attachments": [
       %{
-        "pretext": "#{custom_message}#{webhook_type_message(type, payload)}",
+        "pretext": "#{webhook_type_message(type, payload)}",
         "color": "good",
+        "mrkdwn_in": ["fields", "pretext"],
         "fields": [
           %{
-            "value": "##{Webhook.number(payload)} #{webhook_title(type, payload)}",
+            "value": "*#{webhook_title(type, payload)}*",
           }
         ]
       }
@@ -57,7 +63,7 @@ defmodule HookProxy.GithubToSlackAdapter do
 
   defp check_custom_message(msg) do
     if String.length(msg) > 0 do
-      "#{msg}\n\n"
+      "#{msg}\n"
     else
       ""
     end

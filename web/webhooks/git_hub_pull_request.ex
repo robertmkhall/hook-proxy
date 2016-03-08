@@ -1,4 +1,6 @@
 defmodule HookProxy.GitHubPullRequest do
+  alias HookProxy.GitHubWebhook, as: Webhook
+
   def pull_request(payload, key) do
     payload
     |> Map.get("pull_request")
@@ -18,6 +20,6 @@ defmodule HookProxy.GitHubPullRequest do
   end
 
   def slack_title(payload) do
-    "<#{url(payload)}|#{title(payload)}>"
+    "<#{url(payload)}|##{Webhook.number(payload)} #{title(payload)}>"
   end
 end
