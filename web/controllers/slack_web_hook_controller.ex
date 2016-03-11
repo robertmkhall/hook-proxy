@@ -1,8 +1,12 @@
 defmodule HookProxy.SlackWebHookController do
   use HookProxy.Web, :controller
 
+  import HookProxy.Loaders
+
   alias HookProxy.SlackClient, as: Slack
   alias HookProxy.GithubToSlackAdapter, as: GithubAdapter
+
+  plug :load_webhook_type
 
   def process_webhook(conn, _params) do
     conn

@@ -3,18 +3,7 @@ defmodule HookProxy.GithubToSlackAdapter do
   alias HookProxy.GitHubWebhook, as: Webhook
 
   def slack_request(conn) do
-    slack_request(request_type(conn.req_headers), conn.body_params)
-  end
-
-  defp request_type([]) do
-    :not_recognised
-  end
-
-  defp request_type([head | tail]) do
-    case head do
-      {"x-github-event", type} -> type
-      _ -> request_type(tail)
-    end
+    slack_request(conn.assigns.webhook_type, conn.body_params)
   end
 
   defp slack_request(type, payload) do
@@ -56,7 +45,11 @@ defmodule HookProxy.GithubToSlackAdapter do
   end
 
   defp webhook_type_message(type, payload) do
-    "[#{Webhook.Repo.name(payload)}] #{format_request_type(type)} submitted by <#{Webhook.User.url(payload)}|#{Webhook.User.login(payload)}>"
+    "[#{Webhook.Repo.name(payload)}] #{format_request_type(type)} submitted by #{webhook_submitter(payload)}"
+  end
+
+  defp webhook_submitter(payload) do
+    "<#{Webhook.User.url(payload)}|#{Webhook.User.login(payload)}>"
   end
 
   defp format_request_type(type) do
