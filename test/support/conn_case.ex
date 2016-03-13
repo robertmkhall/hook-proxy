@@ -20,10 +20,10 @@ defmodule HookProxy.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      alias HookProxy.Repo
-      import Ecto
-      import Ecto.Changeset
-      import Ecto.Query, only: [from: 1, from: 2]
+#      alias HookProxy.Repo
+#      import Ecto
+#      import Ecto.Changeset
+#      import Ecto.Query, only: [from: 1, from: 2]
 
       import HookProxy.Router.Helpers
 
@@ -33,9 +33,9 @@ defmodule HookProxy.ConnCase do
   end
 
   setup tags do
-    unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(HookProxy.Repo, [])
-    end
+#    unless tags[:async] do
+#      Ecto.Adapters.SQL.restart_test_transaction(HookProxy.Repo, [])
+#    end
 
     {:ok, conn: Phoenix.ConnTest.conn()}
   end

@@ -1,0 +1,21 @@
+{
+  "username": "github",
+  "icon_emoji": ":github:",
+  "text": custom_message,
+  "mrkdwn": true,
+  "attachments": [
+    {
+      "pretext": "#{webhook_type_message(type, payload)}",
+      "color": "good",
+      "mrkdwn_in": [
+        "fields",
+        "pretext"
+      ],
+      "fields": [
+        {
+          "value": "*#{webhook_title(type, payload)}*",
+        }
+      ]
+    }
+  ]
+}
