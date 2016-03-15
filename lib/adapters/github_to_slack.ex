@@ -14,7 +14,7 @@ defmodule HookProxy.GithubToSlackAdapter do
     {:ok, request_json("Pull request", payload, PullRequest.slack_title(payload))}
   end
 
-  defp request_json(_, payload) do
+  defp request_json(_webhook_type, _payload) do
     {:error, "unsupported webhook type"}
   end
 
