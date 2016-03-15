@@ -2,7 +2,7 @@ defmodule HookProxy.SlackClient do
   use HTTPoison.Base
 
   def post(body) do
-    post base_url <> "/services" <> webhook_url, body
+    post base_url <> "/services/" <> webhook_url, body
   end
 
   def webhook_url, do: Keyword.fetch!(config, :webhook_url)

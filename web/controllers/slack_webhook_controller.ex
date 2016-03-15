@@ -9,8 +9,6 @@ defmodule HookProxy.SlackWebhookController do
   plug :load_webhook_type
 
   def webhook(conn, _params) do
-    IO.puts "webhook-url= #{Slack.webhook_url}"
-
     conn
     |> forward_to_slack
     |> send_response(conn)
