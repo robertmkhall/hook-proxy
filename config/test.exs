@@ -12,7 +12,7 @@ config :logger, level: :warn
 config :bypass, enable_debug_log: true
 
 config :hook_proxy, :slack,
-  webhook_url: "/test-slug"
+  webhook_slug: "/test-slug"
 
 # Configure your database
 config :hook_proxy, HookProxy.Repo,

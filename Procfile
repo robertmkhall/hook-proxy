@@ -1,0 +1,1 @@
+web: SLACK_WEBHOOK_SLUG=$SLACK_WEBHOOK_SLUG mix phoenix.server
