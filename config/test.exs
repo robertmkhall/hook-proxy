@@ -13,12 +13,3 @@ config :bypass, enable_debug_log: true
 
 config :hook_proxy, :slack,
   webhook_slug: "/test-slug"
-
-# Configure your database
-config :hook_proxy, HookProxy.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "hook_proxy_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox

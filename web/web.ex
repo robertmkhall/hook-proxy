@@ -30,10 +30,6 @@ defmodule HookProxy.Web do
     quote do
       use Phoenix.Controller
 
-      alias HookProxy.Repo
-      import Ecto
-      import Ecto.Query, only: [from: 1, from: 2]
-
       import HookProxy.Router.Helpers
       import HookProxy.Gettext
     end
@@ -65,7 +61,6 @@ defmodule HookProxy.Web do
     quote do
       use Phoenix.Channel
 
-      alias HookProxy.Repo
       import Ecto
       import Ecto.Query, only: [from: 1, from: 2]
       import HookProxy.Gettext
