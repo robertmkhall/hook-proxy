@@ -10,6 +10,6 @@ defmodule HookProxy.Router do
   scope "/api", HookProxy do
     pipe_through :api
 
-    post "/webhook/T02GEFU92/B0QJEDM5X/Upu3iT4s4gwP3tEZwd93mKrI", SlackWebhookController, :webhook
+    post "/webhook/#{System.get_env("SLACK_WEBHOOK_URL")}", SlackWebhookController, :webhook
   end
 end
