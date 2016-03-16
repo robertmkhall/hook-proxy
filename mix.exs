@@ -7,8 +7,8 @@ defmodule HookProxy.Mixfile do
      elixir: "~> 1.0",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-#     build_embedded: Mix.env == :prod,
-#     start_permanent: Mix.env == :prod,
+     build_embedded: Mix.env == :prod,
+     start_permanent: Mix.env == :prod,
      aliases: aliases,
      deps: deps]
   end
