@@ -1,6 +1,8 @@
 defmodule HookProxy.Router do
   use HookProxy.Web, :router
 
+  require Logger
+
   alias HookProxy.SlackClient, as: Slack
 
   pipeline :api do
