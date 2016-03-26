@@ -38,7 +38,8 @@ defmodule HookProxy.Mixfile do
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.8.0"},
      {:bypass, "~> 0.5.1"},
-     {:dogma, "~> 0.1", only: :dev}]
+     {:dogma, "~> 0.1", only: :dev},
+     {:credo, "~> 0.3", only: [:dev, :test]}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.
