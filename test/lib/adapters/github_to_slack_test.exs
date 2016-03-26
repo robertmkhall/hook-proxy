@@ -17,6 +17,12 @@ defmodule HookProxy.GithubToSlackAdapterTest do
     assert Map.equal?(json, expected_slack_json)
   end
 
+  test "request_json for unsupported request type returns error message" do
+    {status, error_message} = GithubAdapter.request_json("unknown_type", Poison.decode! @github_json)
+
+    assert {status, error_message} == {:error, "unsupported webhook type"}
+  end
+
   def expected_slack_json do
     %{"username": "github",
       "icon_emoji": ":github:",
