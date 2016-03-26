@@ -4,14 +4,14 @@ defmodule HookProxy.GithubToSlackAdapter do
   alias HookProxy.SlackClient, as: Slack
 
   def request_json("pull_request", payload) do
-    {:ok, request_json("Pull request", payload, PullRequest.slack_title(payload))}
+    {:ok, json("Pull request", payload)}
   end
 
   def request_json(_webhook_type, _payload) do
     {:error, "unsupported webhook type"}
   end
 
-  defp request_json(display_type, payload, webhook_title) do
+  defp json(display_type, payload) do
     %{
       "username": "github",
       "icon_emoji": ":github:",
@@ -19,23 +19,31 @@ defmodule HookProxy.GithubToSlackAdapter do
       "mrkdwn": true,
       "attachments": [
       %{
-        "pretext": "#{webhook_type_message(display_type, payload)}",
+        "pretext": webhook_pretext(display_type, payload),
         "color": "good",
         "mrkdwn_in": ["fields", "pretext"],
         "fields": [
           %{
-            "value": "*#{webhook_title}*",
+            "value": "*#{webhook_title(payload)}*",
           }
         ]
       }
     ]}
   end
 
-  defp webhook_type_message(display_type, payload) do
-    "[#{Webhook.Repo.name(payload)}] #{display_type} submitted by #{webhook_submitter(payload)}"
+  defp webhook_pretext(display_type, payload) do
+    "[#{repo_name(payload)}] #{display_type} submitted by #{submitter(payload)}"
   end
 
-  defp webhook_submitter(payload) do
+  defp submitter(payload) do
     "<#{Webhook.User.url(payload)}|#{Webhook.User.login(payload)}>"
+  end
+
+  defp repo_name(payload) do
+    Webhook.Repo.name(payload)
+  end
+
+  defp webhook_title(payload) do
+    PullRequest.slack_title(payload)
   end
 end

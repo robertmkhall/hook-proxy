@@ -16,8 +16,10 @@ defmodule HookProxy.SlackWebhookController do
 
   defp forward_to_slack(conn, params) do
     case GithubAdapter.request_json(conn.assigns.webhook_type, conn.body_params) do
-      {:ok, request_json} -> Poison.encode!(request_json) |> Slack.post_webhook(params)
-      {:error, error_message} -> {:error, %{status_code: 400, body: error_message}}
+      {:ok, request_json}
+        -> Poison.encode!(request_json) |> Slack.post_webhook(params)
+      {:error, error_message}
+        -> {:error, %{status_code: 400, body: error_message}}
     end
   end
 

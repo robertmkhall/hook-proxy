@@ -21,7 +21,6 @@ config :logger, :console,
 
 config :hook_proxy, :slack,
   base_url: "https://hooks.slack.com",
-  webhook_slug: System.get_env("SLACK_WEBHOOK_SLUG"),
   custom_message: System.get_env("SLACK_CUSTOM_MESSAGE")
 
 # Import environment specific config. This must remain at the bottom

@@ -10,7 +10,6 @@ defmodule HookProxy.SlackWebhookControllerTest do
 
     Application.put_env :hook_proxy, :slack,
       base_url: "http://localhost:#{bypass.port}",
-      webhook_slug: @webhook_slug,
       custom_message: "check out this sweet pull request"
 
     {:ok, bypass: bypass}
