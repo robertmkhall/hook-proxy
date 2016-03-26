@@ -10,6 +10,3 @@ config :hook_proxy, HookProxy.Endpoint,
 config :logger, level: :warn
 
 config :bypass, enable_debug_log: true
-
-config :hook_proxy, :slack,
-  webhook_slug: "/test-slug"

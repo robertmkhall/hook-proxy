@@ -14,8 +14,6 @@ defmodule HookProxy.GitHubPullRequest do
   end
 
   defp pull_request(payload, key) do
-    payload
-    |> Map.get("pull_request")
-    |> Map.get(key)
+    payload["pull_request"][key]
   end
 end

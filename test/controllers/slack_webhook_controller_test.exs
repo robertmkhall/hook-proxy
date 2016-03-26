@@ -3,16 +3,14 @@ defmodule HookProxy.SlackWebhookControllerTest do
   use Plug.Test
 
   @github_pull_request_json File.read!("test/fixtures/github_pull_request.json")
-  @slack_pull_request_json File.read!("test/fixtures/slack_pull_request.json")
-
-  @opts HookProxy.Router.init([])
+  @webhook_slug "dsf563f/xasxasdl97fbn/blasdassd"
 
   setup do
     bypass = Bypass.open
 
     Application.put_env :hook_proxy, :slack,
       base_url: "http://localhost:#{bypass.port}",
-      webhook_url: "/test-slug",
+      webhook_slug: @webhook_slug,
       custom_message: "check out this sweet pull request"
 
     {:ok, bypass: bypass}
@@ -21,7 +19,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
   test "POST /api/webhook forwards pull request to slack with custom text", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert "POST" == conn.method
-      assert "/services/test-slug" == conn.request_path
+      assert "/services/#{@webhook_slug}" == conn.request_path
 
       Plug.Conn.resp(conn, 200, "request recieved at slack")
     end
@@ -29,7 +27,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "pull_request")
-    |> post("/api/webhook/test-slug", @github_pull_request_json)
+    |> post("/api/webhook/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -41,7 +39,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "invalid-type")
-    |> post("/api/webhook/test-slug", @github_pull_request_json)
+    |> post("/api/webhook/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent

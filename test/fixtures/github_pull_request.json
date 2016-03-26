@@ -1,10 +1,10 @@
 {
   "number": "23",
   "repository": {
-    "full_name": "Timmy Mallet"
+    "full_name": "wackaday"
   },
   "sender": {
-    "login": "@timmymallet",
+    "login": "@timmymallett",
     "html_url": "http://some.url.com/timmy_mallet"
   },
   "pull_request": {

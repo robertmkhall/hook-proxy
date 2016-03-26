@@ -3,18 +3,11 @@ defmodule HookProxy.GithubToSlackAdapter do
   alias HookProxy.GitHubWebhook, as: Webhook
   alias HookProxy.SlackClient, as: Slack
 
-  def request_json(conn) do
-    case request_json(conn.assigns.webhook_type, conn.body_params) do
-      {:ok, request_json} -> {:ok,  request_json |> Poison.encode!}
-      {:error, error_msg} -> {:error, error_msg}
-    end
-  end
-
-  defp request_json("pull_request", payload) do
+  def request_json("pull_request", payload) do
     {:ok, request_json("Pull request", payload, PullRequest.slack_title(payload))}
   end
 
-  defp request_json(_webhook_type, _payload) do
+  def request_json(_webhook_type, _payload) do
     {:error, "unsupported webhook type"}
   end
 
