@@ -2,7 +2,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
   use HookProxy.ConnCase, async: false
   use Plug.Test
 
-  @github_pull_request_json File.read!("test/fixtures/github_pull_request.json")
+  @github_pull_request_json File.read!("test/fixtures/github_opened_pull_request.json")
   @webhook_slug "dsf563f/xasxasdl97fbn/blasdassd"
 
   setup do
@@ -34,7 +34,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     assert String.contains?(conn.resp_body, "request recieved at slack")
   end
 
-  test "POST /api/webhook with unsupported request type returns 400", %{bypass: bypass} do
+  test "POST /api/webhook with unsupported request type returns 400" do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "invalid-type")
