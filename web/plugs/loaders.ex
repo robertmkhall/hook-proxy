@@ -2,6 +2,8 @@ defmodule HookProxy.Loaders do
   import Plug.Conn
 
   def load_webhook_type(conn, _) do
+    IO.inspect conn
+
     assign(conn, :webhook_type, webhook_type(conn.req_headers))
   end
 
