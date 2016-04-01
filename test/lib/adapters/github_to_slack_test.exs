@@ -42,7 +42,7 @@ defmodule HookProxy.GithubToSlackAdapterTest do
   test "request_json for unsupported action returns error message" do
     {status, error_message} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_unknown_pull_request_json)
 
-    assert {status, error_message} == {:error, "unknown pull request action not supported"}
+    assert {status, error_message} == {:error, "pull request action 'unknown' not supported"}
   end
 
   def expected_open_pull_request_json(action) do

@@ -11,7 +11,7 @@ defmodule HookProxy.SlackPullRequest do
       "opened" -> {:ok, opened_json(payload, "submitted")}
       "reopened" -> {:ok, opened_json(payload, "reopened")}
       "closed" -> {:ok, closed_json(payload)}
-      unsupported -> {:error, "#{unsupported} pull request action not supported"}
+      unsupported -> {:error, "pull request action '#{unsupported}' not supported"}
     end
   end
 
