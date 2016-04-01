@@ -7,10 +7,15 @@ defmodule HookProxy.SlackPullRequest do
   alias Webhook.PullRequest, as: PullRequest
 
   def json(payload) do
-    json(Webhook.action(payload), payload)
+    case Webhook.action(payload) do
+      "opened" -> {:ok, opened_json(payload, "submitted")}
+      "reopened" -> {:ok, opened_json(payload, "reopened")}
+      "closed" -> {:ok, closed_json(payload)}
+      unsupported -> {:error, "#{unsupported} pull request action not supported"}
+    end
   end
 
-  defp json("opened", payload) do
+  defp opened_json(payload, action) do
     %{
       "username": "github",
       "icon_emoji": ":github:",
@@ -18,7 +23,7 @@ defmodule HookProxy.SlackPullRequest do
       "mrkdwn": true,
       "attachments": [
       %{
-        "pretext": "#{repo_name(payload)} Pull request submitted by #{user(payload)}",
+        "pretext": "#{repo_name(payload)} Pull request #{action} by #{user(payload)}",
         "color": "good",
         "mrkdwn_in": ["fields", "pretext"],
         "fields": [
@@ -30,7 +35,7 @@ defmodule HookProxy.SlackPullRequest do
     ]}
   end
 
-  defp json("closed", payload) do
+  defp closed_json(payload) do
     %{
       "username": "github",
       "icon_emoji": ":github:",

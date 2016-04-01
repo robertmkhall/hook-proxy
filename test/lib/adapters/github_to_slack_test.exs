@@ -4,7 +4,9 @@ defmodule HookProxy.GithubToSlackAdapterTest do
   alias HookProxy.GithubToSlackAdapter, as: GithubAdapter
 
   @github_opened_pull_request_json File.read!("test/fixtures/github_opened_pull_request.json")
+  @github_reopened_pull_request_json File.read!("test/fixtures/github_reopened_pull_request.json")
   @github_closed_pull_request_json File.read!("test/fixtures/github_closed_pull_request.json")
+  @github_unknown_pull_request_json File.read!("test/fixtures/github_unknown_pull_request.json")
 
   @custom_message "check out this sweet pull request"
 
@@ -13,10 +15,16 @@ defmodule HookProxy.GithubToSlackAdapterTest do
       custom_message: @custom_message
   end
 
-  test "request_json returns slack webhook open pull request json" do
+  test "request_json returns slack webhook opened pull request json" do
     {_, json} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_opened_pull_request_json)
 
-    assert Map.equal?(json, expected_open_pull_request_json)
+    assert Map.equal?(json, expected_open_pull_request_json("submitted"))
+  end
+
+  test "request_json returns slack webhook reopened pull request json" do
+    {_, json} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_reopened_pull_request_json)
+
+    assert Map.equal?(json, expected_open_pull_request_json("reopened"))
   end
 
   test "request_json returns slack webhook closed pull request json" do
@@ -31,14 +39,20 @@ defmodule HookProxy.GithubToSlackAdapterTest do
     assert {status, error_message} == {:error, "unsupported webhook type"}
   end
 
-  def expected_open_pull_request_json do
+  test "request_json for unsupported action returns error message" do
+    {status, error_message} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_unknown_pull_request_json)
+
+    assert {status, error_message} == {:error, "unknown pull request action not supported"}
+  end
+
+  def expected_open_pull_request_json(action) do
     %{"username": "github",
       "icon_emoji": ":github:",
       "text": @custom_message,
       "mrkdwn": true,
       "attachments": [
       %{
-        "pretext": "[wackaday] Pull request submitted by <http://some.url.com/timmy_mallet|@timmymallett>",
+        "pretext": "[wackaday] Pull request #{action} by <http://some.url.com/timmy_mallet|@timmymallett>",
         "color": "good",
         "mrkdwn_in": ["fields", "pretext"],
         "fields": [
