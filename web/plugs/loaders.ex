@@ -1,20 +1,18 @@
 defmodule HookProxy.Loaders do
   import Plug.Conn
 
-  def load_webhook_type(conn, _) do
-    IO.inspect conn
-
-    assign(conn, :webhook_type, webhook_type(conn.req_headers))
+  def load_webhook_source(conn, _) do
+    assign(conn, :webhook_source, webhook_source(conn))
   end
 
-  defp webhook_type([]) do
-    :not_recognised
-  end
-
-  defp webhook_type([head | tail]) do
-    case head do
-      {"x-github-event", type} -> type
-      _ -> webhook_type(tail)
+  defp webhook_source(conn) do
+    cond do
+      Enum.any?(conn.req_headers, fn({key, val}) -> key == "x-github-event" end) ->
+        :github
+      Map.has_key?(conn.body_params, "object_kind") ->
+        :gitlab
+      true ->
+        :unsupported
     end
   end
 end

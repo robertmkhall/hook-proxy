@@ -6,10 +6,10 @@ defmodule HookProxy.SlackWebhookController do
   alias HookProxy.SlackClient, as: Slack
   alias HookProxy.GithubToSlackAdapter, as: GithubAdapter
 
-  plug :load_webhook_type
+  plug :load_webhook_source
 
   def webhook(conn, params) do
-    response = case slack_request(conn) do
+    response = case slack_request(conn.assigns.webhook_source, conn) do
       {:ok, json} -> forward_to_slack(json, params)
       {:error, error} -> {:error, %{status_code: 400, body: error}}
     end
@@ -17,8 +17,8 @@ defmodule HookProxy.SlackWebhookController do
     send_response(conn, response)
   end
 
-  defp slack_request(conn) do
-    GithubAdapter.slack_request(conn.assigns.webhook_type, conn.body_params)
+  defp slack_request(:github, conn) do
+    GithubAdapter.slack_request(conn)
   end
 
   defp forward_to_slack(json, params) do

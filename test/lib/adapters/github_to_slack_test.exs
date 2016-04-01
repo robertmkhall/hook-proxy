@@ -16,31 +16,36 @@ defmodule HookProxy.GithubToSlackAdapterTest do
   end
 
   test "request_json returns slack webhook opened pull request json" do
-    {_, json} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_opened_pull_request_json)
+    conn = %{req_headers: [{"x-github-event", "pull_request"}], body_params: Poison.decode! @github_opened_pull_request_json}
+    {_, json} = GithubAdapter.slack_request(conn)
 
     assert Map.equal?(json, expected_open_pull_request_json("submitted"))
   end
 
   test "request_json returns slack webhook reopened pull request json" do
-    {_, json} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_reopened_pull_request_json)
+    conn = %{req_headers: [{"x-github-event", "pull_request"}], body_params: Poison.decode! @github_reopened_pull_request_json}
+    {_, json} = GithubAdapter.slack_request(conn)
 
     assert Map.equal?(json, expected_open_pull_request_json("reopened"))
   end
 
   test "request_json returns slack webhook closed pull request json" do
-    {_, json} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_closed_pull_request_json)
+    conn = %{req_headers: [{"x-github-event", "pull_request"}], body_params: Poison.decode! @github_closed_pull_request_json}
+    {_, json} = GithubAdapter.slack_request(conn)
 
     assert Map.equal?(json, expected_closed_pull_request_json)
   end
 
   test "request_json for unsupported request type returns error message" do
-    {status, error_message} = GithubAdapter.slack_request("unknown_type", Poison.decode! @github_opened_pull_request_json)
+    conn = %{req_headers: [], body_params: Poison.decode! @github_reopened_pull_request_json}
+    {status, error_message} = GithubAdapter.slack_request(conn)
 
     assert {status, error_message} == {:error, "unsupported webhook type"}
   end
 
   test "request_json for unsupported action returns error message" do
-    {status, error_message} = GithubAdapter.slack_request("pull_request", Poison.decode! @github_unknown_pull_request_json)
+    conn = %{req_headers: [{"x-github-event", "pull_request"}], body_params: Poison.decode! @github_unknown_pull_request_json}
+    {status, error_message} = GithubAdapter.slack_request(conn)
 
     assert {status, error_message} == {:error, "pull request action 'unknown' not supported"}
   end
