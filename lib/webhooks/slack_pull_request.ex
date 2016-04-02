@@ -1,44 +1,40 @@
 defmodule HookProxy.SlackPullRequest do
   alias HookProxy.SlackClient, as: Slack
 
-  alias HookProxy.GitHubWebhook, as: Webhook
-  alias Webhook.Repo, as: GithubRepo
-  alias Webhook.User, as: GithubUser
-  alias Webhook.PullRequest, as: PullRequest
-
-  def json(payload) do
-    case Webhook.action(payload) do
-      "opened" -> {:ok, opened_json(payload, "submitted")}
-      "reopened" -> {:ok, opened_json(payload, "reopened")}
-      "closed" -> {:ok, closed_json(payload)}
+  def json(data) do
+    case data.action do
+      "opened" -> {:ok, opened_json(data, "submitted")}
+      "open" -> {:ok, opened_json(data, "submitted")}
+      "reopened" -> {:ok, opened_json(data, "reopened")}
+      "closed" -> {:ok, closed_json(data)}
       unsupported -> {:error, "pull request action '#{unsupported}' not supported"}
     end
   end
 
-  defp opened_json(payload, action) do
+  defp opened_json(data, action) do
     %{
-      "username": "github",
-      "icon_emoji": ":github:",
+      "username": data.slack_user,
+      "icon_emoji": data.slack_emoji,
       "text": Slack.custom_message,
       "mrkdwn": true,
       "attachments": [
       %{
-        "pretext": "#{repo_name(payload)} Pull request #{action} by #{user(payload)}",
+        "pretext": "#{repo_name(data)} Pull request #{action} by #{user(data)}",
         "color": "good",
         "mrkdwn_in": ["fields", "pretext"],
         "fields": [
           %{
-            "value": "*#{request_title(payload)}*",
+            "value": "*#{request_title(data)}*",
           }
         ]
       }
     ]}
   end
 
-  defp closed_json(payload) do
+  defp closed_json(data) do
     %{
-      "username": "github",
-      "icon_emoji": ":github:",
+      "username": data.slack_user,
+      "icon_emoji": data.slack_emoji,
       "text": Slack.custom_message,
       "mrkdwn": true,
       "attachments": [
@@ -46,22 +42,22 @@ defmodule HookProxy.SlackPullRequest do
         "mrkdwn_in": ["fields"],
         "fields": [
           %{
-            "value": "#{repo_name(payload)} Pull request closed: #{request_title(payload)} by #{user(payload)}",
+            "value": "#{repo_name(data)} Pull request closed: #{request_title(data)} by #{user(data)}",
           }
         ]
       }
     ]}
   end
 
-  defp repo_name(payload) do
-    "[#{GithubRepo.name(payload)}]"
+  defp repo_name(data) do
+    "[#{data.repo_name}]"
   end
 
-  defp user(payload) do
-    "<#{GithubUser.url(payload)}|#{GithubUser.login(payload)}>"
+  defp user(data) do
+    "<#{data.user_url}|#{data.user_id}>"
   end
 
-  defp request_title(payload) do
-    "<#{PullRequest.url(payload)}|##{Webhook.number(payload)} #{PullRequest.title(payload)}>"
+  defp request_title(data) do
+    "<#{data.request_url}|##{data.number} #{data.title}>"
   end
 end

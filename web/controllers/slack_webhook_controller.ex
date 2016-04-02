@@ -5,6 +5,7 @@ defmodule HookProxy.SlackWebhookController do
 
   alias HookProxy.SlackClient, as: Slack
   alias HookProxy.GithubToSlackAdapter, as: GithubAdapter
+  alias HookProxy.GitlabToSlackAdapter, as: GitlabAdapter
 
   plug :load_webhook_source
 
@@ -19,6 +20,10 @@ defmodule HookProxy.SlackWebhookController do
 
   defp slack_request(:github, conn) do
     GithubAdapter.slack_request(conn)
+  end
+
+  defp slack_request(:gitlab, conn) do
+    GitlabAdapter.slack_request(conn)
   end
 
   defp forward_to_slack(json, params) do
