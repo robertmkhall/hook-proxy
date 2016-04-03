@@ -1,20 +1,50 @@
 # HookProxy
 
-To start your Phoenix app:
+A stand alone app that acts as a proxy to forward webhooks from one service to another. The proxy can be configured to 
+attach a custom message to the front of each webhook message. 
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `npm install`
-  * Start Phoenix endpoint with `mix phoenix.server`
+## Supported Services
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+The app currently supports the forwarding of webhooks to/from the following services
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+Service From | Service To
+-------------|-----------
+Github       | Slack
+Gitlab       | Slack
 
-## Learn more
+## Supported webhook types
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: http://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+The app currently supports the following webhook types
+
+Service | Webhook type 
+--------|-------------
+Github  | Pull Requests  
+Gitlab  | Merge Requests
+
+## Configuration
+
+### Custom message
+
+The app only supports a single custom message per service being forward to. The following variables can be set:
+
+Service To | Env variable
+-----------|-------------
+Slack      | SLACK_CUSTOM_MESSAGE
+
+## Usage
+
+First generate the url that the webhook will be forwarded to. 
+
+![](docs/slack_incoming_webhook_example.png)
+
+Then create the webhook. Point the url to the hook proxy app deployment with the url generated above appended 
+to the end.
+
+![](docs/github_outgoing_webhook_example.png)
+
+Set a custom message on the hook proxy app. Generate a webhook (e.g. create a pull request) and the custom message along
+with the original webhook values will be sent to the receiving service. 
+
+  SLACK_CUSTOM_MESSAGE=<@channel>: check this out...
+
+  ![](docs/github_slack_example.png)
