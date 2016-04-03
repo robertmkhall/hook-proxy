@@ -17,7 +17,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     {:ok, bypass: bypass}
   end
 
-  test "POST /api/webhook forwards github pull request to slack with custom text", %{bypass: bypass} do
+  test "POST /api/webhook/slack forwards github pull request to slack with custom text", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert "POST" == conn.method
       assert "/services/#{@webhook_slug}" == conn.request_path
@@ -28,7 +28,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "pull_request")
-    |> post("/api/webhook/#{@webhook_slug}", @github_pull_request_json)
+    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -36,7 +36,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     assert String.contains?(conn.resp_body, "request recieved at slack")
   end
 
-  test "POST /api/webhook forwards gitlab pull request to slack with custom text", %{bypass: bypass} do
+  test "POST /api/webhook/slack forwards gitlab pull request to slack with custom text", %{bypass: bypass} do
     Bypass.expect bypass, fn conn ->
       assert "POST" == conn.method
       assert "/services/#{@webhook_slug}" == conn.request_path
@@ -46,7 +46,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
 
     conn = conn
     |> put_req_header("content-type", "application/json")
-    |> post("/api/webhook/#{@webhook_slug}", @gitlab_pull_request_json)
+    |> post("/api/webhook/slack/#{@webhook_slug}", @gitlab_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -54,11 +54,11 @@ defmodule HookProxy.SlackWebhookControllerTest do
     assert String.contains?(conn.resp_body, "request recieved at slack")
   end
 
-  test "POST /api/webhook with unsupported request type returns 400" do
+  test "POST /api/webhook/slack with unsupported request type returns 400" do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "invalid-type")
-    |> post("/api/webhook/#{@webhook_slug}", @github_pull_request_json)
+    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
