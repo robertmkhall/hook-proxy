@@ -15,8 +15,6 @@ defmodule HookProxy.SlackWebhookController do
       {:error, error} -> {:error, %{status_code: 400, body: error}}
     end
 
-    IO.inspect response
-
     send_response(conn, response)
   end
 
