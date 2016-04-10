@@ -1,7 +1,7 @@
 defmodule HookProxy.GithubToSlackAdapterTest do
   use ExUnit.Case
 
-  alias HookProxy.GithubToSlackAdapter, as: GithubAdapter
+  alias HookProxy.Adapters.GithubToSlack, as: GithubAdapter
 
   @github_opened_pull_request_json File.read!("test/fixtures/github_opened_pull_request.json")
   @github_reopened_pull_request_json File.read!("test/fixtures/github_reopened_pull_request.json")

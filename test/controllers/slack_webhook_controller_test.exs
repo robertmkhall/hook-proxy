@@ -14,6 +14,10 @@ defmodule HookProxy.SlackWebhookControllerTest do
       base_url: "http://localhost:#{bypass.port}",
       custom_message: "check out this sweet pull request"
 
+    on_exit fn ->
+       System.delete_env("VCAP_SERVICES")
+    end
+
     {:ok, bypass: bypass}
   end
 
@@ -64,5 +68,27 @@ defmodule HookProxy.SlackWebhookControllerTest do
     assert conn.state == :sent
     assert conn.status == 400
     assert String.contains?(conn.resp_body, "unsupported webhook type")
+  end
+
+  test "POST with slack proxy", %{bypass: bypass} do
+    cf_env = "{\"proxy\":[{\"credentials\":{\"host\":\"http://localhost\",\"port\":#{bypass.port},\"username\":\"proxyuser\",\"password\":\"password\"}}]}"
+    System.put_env("VCAP_SERVICES", cf_env)
+
+    Bypass.expect bypass, fn conn ->
+      assert "POST" == conn.method
+      assert "/services/#{@webhook_slug}" == conn.request_path
+
+      Plug.Conn.resp(conn, 200, "request recieved at slack")
+    end
+
+    conn = conn
+    |> put_req_header("content-type", "application/json")
+    |> put_req_header("x-github-event", "pull_request")
+    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
+
+    # Assert the response and status
+    assert conn.state == :sent
+    assert conn.status == 200
+    assert String.contains?(conn.resp_body, "request recieved at slack")
   end
 end

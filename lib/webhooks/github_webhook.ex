@@ -1,4 +1,4 @@
-defmodule HookProxy.GitHubWebhook do
+defmodule HookProxy.Webhooks.GitHub do
   def number(payload), do: payload["number"]
 
   def action(payload), do: payload["action"]
@@ -18,8 +18,6 @@ defmodule HookProxy.GitHubWebhook do
   end
 
   defmodule PullRequest do
-    alias HookProxy.GitHubWebhook, as: Webhook
-
     defp pull_request(payload, key), do: payload["pull_request"][key]
 
     def title(payload), do: pull_request(payload, "title")

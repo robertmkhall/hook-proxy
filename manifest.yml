@@ -1,0 +1,9 @@
+---
+applications:
+- name: hook-proxy
+  memory: 256M
+  stack: cflinuxfs2
+  buildpack: https://github.com/ddollar/heroku-buildpack-multi
+  command: mix phoenix.server --no-halt
+  env:
+    STACK: cflinuxfs2

@@ -1,7 +1,7 @@
-defmodule HookProxy.GithubToSlackAdapter do
-  alias HookProxy.SlackPullRequest
+defmodule HookProxy.Adapters.GithubToSlack do
+  alias HookProxy.Webhooks.Slack.PullRequest, as: SlackPullRequest
 
-  alias HookProxy.GitHubWebhook, as: Webhook
+  alias HookProxy.Webhooks.GitHub, as: Webhook
   alias Webhook.{Repo, User, PullRequest}
 
   def slack_request(conn) do

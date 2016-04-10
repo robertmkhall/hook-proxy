@@ -1,0 +1,6 @@
+erl_crash.dump
+/.idea
+/_build
+/deps
+/node_modules
+*.iml

@@ -1,7 +1,7 @@
 defmodule HookProxy.GitlabToSlackAdapterTest do
   use ExUnit.Case
 
-  alias HookProxy.GitlabToSlackAdapter, as: GitlabAdapter
+  alias HookProxy.Adapters.GitlabToSlack, as: GitlabAdapter
 
   @gitlab_opened_pull_request_json File.read!("test/fixtures/gitlab_opened_pull_request.json")
 

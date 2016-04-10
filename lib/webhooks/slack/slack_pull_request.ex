@@ -1,5 +1,5 @@
-defmodule HookProxy.SlackPullRequest do
-  alias HookProxy.SlackClient, as: Slack
+defmodule HookProxy.Webhooks.Slack.PullRequest do
+  alias HookProxy.Clients.Slack
 
   def json(data) do
     case data.action do

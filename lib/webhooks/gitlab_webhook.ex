@@ -1,4 +1,4 @@
-defmodule HookProxy.GitlabWebhook do
+defmodule HookProxy.Webhooks.Gitlab do
   def type(payload), do: payload["object_kind"]
 
   def action(payload), do: attributes(payload)["action"]
