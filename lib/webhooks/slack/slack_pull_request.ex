@@ -35,7 +35,6 @@ defmodule HookProxy.Webhooks.Slack.PullRequest do
     %{
       "username": data.slack_user,
       "icon_emoji": data.slack_emoji,
-      "text": Slack.custom_message,
       "mrkdwn": true,
       "attachments": [
       %{

@@ -72,7 +72,6 @@ defmodule HookProxy.GithubToSlackAdapterTest do
   def expected_closed_pull_request_json do
     %{"username": "github",
       "icon_emoji": ":github:",
-      "text": @custom_message,
       "mrkdwn": true,
       "attachments": [
       %{
