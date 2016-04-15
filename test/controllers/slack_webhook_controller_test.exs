@@ -32,7 +32,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "pull_request")
-    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
+    |> post("/hookproxy/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -50,7 +50,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
 
     conn = conn
     |> put_req_header("content-type", "application/json")
-    |> post("/api/webhook/slack/#{@webhook_slug}", @gitlab_pull_request_json)
+    |> post("/hookproxy/api/webhook/slack/#{@webhook_slug}", @gitlab_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -62,7 +62,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "invalid-type")
-    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
+    |> post("/hookproxy/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent
@@ -84,7 +84,7 @@ defmodule HookProxy.SlackWebhookControllerTest do
     conn = conn
     |> put_req_header("content-type", "application/json")
     |> put_req_header("x-github-event", "pull_request")
-    |> post("/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
+    |> post("/hookproxy/api/webhook/slack/#{@webhook_slug}", @github_pull_request_json)
 
     # Assert the response and status
     assert conn.state == :sent

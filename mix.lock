@@ -12,7 +12,7 @@
   "fs": {:hex, :fs, "0.9.2"},
   "gettext": {:hex, :gettext, "0.10.0"},
   "hackney": {:hex, :hackney, "1.6.0"},
-  "httpoison": {:hex, :httpoison, "0.8.1"},
+  "httpoison": {:hex, :httpoison, "0.8.3"},
   "idna": {:hex, :idna, "1.2.0"},
   "metrics": {:hex, :metrics, "1.0.1"},
   "mimerl": {:hex, :mimerl, "1.0.2"},

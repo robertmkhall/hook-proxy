@@ -36,11 +36,10 @@ defmodule HookProxy.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
-     {:httpoison, "~> 0.8.0"},
+     {:httpoison, "~> 0.8.3"},
      {:bypass, "~> 0.5.1"},
      {:dogma, "~> 0.1", only: :dev},
-     {:credo, "~> 0.3", only: [:dev, :test]},
-     {:hackney, "~> 1.6.0", override: true}]
+     {:credo, "~> 0.3", only: [:dev, :test]}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.

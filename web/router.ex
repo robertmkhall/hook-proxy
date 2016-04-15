@@ -9,7 +9,7 @@ defmodule HookProxy.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", HookProxy do
+  scope "/hookproxy/api", HookProxy do
     pipe_through :api
 
     post "/webhook/slack/:slug_1/:slug_2/:slug_3", SlackWebhookController, :webhook
