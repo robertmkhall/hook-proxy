@@ -31,7 +31,7 @@ defmodule HookProxy.GitlabToSlackAdapterTest do
         "mrkdwn_in": ["fields", "pretext"],
         "fields": [
           %{
-            "value": "*<http://example.com/diaspora/merge_requests/1|#1 some changes made to gitlab>*"
+            "value": "*<http://example.com/diaspora/merge_requests/1|#1 Some awesome changes>*"
           }
         ]
       }]

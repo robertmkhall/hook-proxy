@@ -7,6 +7,8 @@ defmodule HookProxy.Webhooks.Gitlab do
 
   def number(payload), do: attributes(payload)["iid"]
 
+  def title(payload), do: attributes(payload)["title"]
+
   defp attributes(payload), do: payload["object_attributes"]
 
   defmodule Repo do

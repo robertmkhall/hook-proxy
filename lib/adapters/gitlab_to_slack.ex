@@ -26,7 +26,7 @@ defmodule HookProxy.Adapters.GitlabToSlack do
       user_id: User.login(payload),
       request_url: Webhook.url(payload),
       number: Webhook.number(payload),
-      title: LastCommit.title(payload),
+      title: Webhook.title(payload),
       slack_user: "gitlab",
       slack_emoji: ":gitlab:"
     }
